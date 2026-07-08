@@ -1,0 +1,1 @@
+A cloud-based presentation and video conferencing platform that enables users to host HD meetings, share screens, present slides, chat in real time, record sessions, and collaborate securely from any device. It offers reliable communication, easy scheduling, and powerful tools for business, education, and remote teamwork.
