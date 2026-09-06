@@ -105,15 +105,22 @@ export default function Room() {
       socket.on('connect', onConnect);
 
       socket.on('room-participants', (list) => {
-        list.forEach((p) => {
+        const remoteParticipants = list.filter((p) => p.id !== socket.id);
+        const participantIds = new Set(remoteParticipants.map((p) => p.id));
+
+        remoteParticipants.forEach((p) => {
           namesRef.current[p.id] = p.name;
         });
         setPeers((prev) => {
-          const next = { ...prev };
-          list.forEach((p) => {
-            next[p.id] = next[p.id] || { name: p.name, stream: null, micOn: true, cameraOn: true };
+          const next = {};
+          remoteParticipants.forEach((p) => {
+            next[p.id] = prev[p.id] || { name: p.name, stream: null, micOn: true, cameraOn: true };
           });
           return next;
+        });
+
+        Object.keys(namesRef.current).forEach((id) => {
+          if (!participantIds.has(id)) delete namesRef.current[id];
         });
       });
 

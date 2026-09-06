@@ -40,13 +40,11 @@ app.prepare().then(() => {
       if (!rooms.has(roomId)) rooms.set(roomId, new Map());
       const room = rooms.get(roomId);
 
-      const participant = { name: name || 'Guest' };
-      const existingParticipants = participantsIn(roomId);
-      room.set(socket.id, participant);
+      room.set(socket.id, { name: name || 'Guest' });
 
-      // Register the newcomer before sending presence events so every client sees
-      // the same room membership even when joins happen close together.
-      socket.emit('room-participants', existingParticipants);
+      // Send an authoritative membership snapshot to every client, including the
+      // newcomer, so the visible participant count stays in sync.
+      io.to(roomId).emit('room-participants', participantsIn(roomId));
 
       // Tell everyone else a new peer joined.
       socket.to(roomId).emit('peer-joined', { id: socket.id, name: name || 'Guest' });
