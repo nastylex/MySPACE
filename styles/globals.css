@@ -1,0 +1,63 @@
+:root {
+  --bg: #14161a;
+  --surface: #1b1e24;
+  --surface-raised: #23272f;
+  --border: #2e333c;
+  --text: #f2f1ed;
+  --text-dim: #9aa0a8;
+  --accent: #3a8f81;
+  --accent-strong: #4faa9a;
+  --accent-soft: #1e423c;
+  --danger: #b5573f;
+  --danger-soft: #3a241d;
+
+  --font-body: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-display), system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
