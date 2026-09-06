@@ -102,7 +102,6 @@ export default function Room() {
         setSelfId(socket.id);
         socket.emit('join-room', { roomId, name });
       }
-      if (socket.connected) onConnect();
       socket.on('connect', onConnect);
 
       socket.on('room-participants', (list) => {
@@ -145,6 +144,7 @@ export default function Room() {
       });
 
       setReady(true);
+      if (socket.connected) onConnect();
     }
 
     init();
