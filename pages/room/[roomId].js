@@ -24,6 +24,29 @@ export default function Room() {
   const [messages, setMessages] = useState([]);
   const [unreadChat, setUnreadChat] = useState(0);
   const [fatalError, setFatalError] = useState(null);
+  const [inviteCopied, setInviteCopied] = useState(false);
+
+  const copyInviteLink = useCallback(async () => {
+    if (!roomId) return;
+    const inviteUrl = `${window.location.origin}/room/${encodeURIComponent(roomId)}`;
+
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+    } catch {
+      const input = document.createElement('input');
+      input.value = inviteUrl;
+      input.setAttribute('readonly', '');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+
+    setInviteCopied(true);
+    window.setTimeout(() => setInviteCopied(false), 2200);
+  }, [roomId]);
 
   const cameraStreamRef = useRef(null);
   const displayStreamRef = useRef(null);
@@ -211,7 +234,7 @@ export default function Room() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `relay-recording-${Date.now()}.webm`;
+      a.download = `myspace-recording-${Date.now()}.webm`;
       a.click();
       URL.revokeObjectURL(url);
       setRecording(false);
@@ -262,12 +285,17 @@ export default function Room() {
   return (
     <>
       <Head>
-        <title>{roomId ? `${roomId} — Relay` : 'Relay'}</title>
+        <title>{roomId ? `${roomId} — MySPACE` : 'MySPACE'}</title>
       </Head>
       <main className="room">
         <div className="topbar">
-          <span className="room-code">{roomId}</span>
-          <span className="count">{peerList.length + 1} in the meeting</span>
+          <div className="room-heading">
+            <span className="room-code">{roomId}</span>
+            <span className="count">{peerList.length + 1} in the meeting</span>
+          </div>
+          <button type="button" className="invite-button" onClick={copyInviteLink}>
+            {inviteCopied ? 'Link copied' : 'Copy invite link'}
+          </button>
         </div>
 
         <div className="grid" data-count={Math.min(peerList.length + 1, 9)}>
@@ -312,13 +340,36 @@ export default function Room() {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 16px;
           margin-bottom: 18px;
           font-size: 0.8125rem;
           color: var(--text-dim);
         }
+        .room-heading {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          min-width: 0;
+        }
         .room-code {
           font-family: var(--font-display);
           color: var(--text);
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .invite-button {
+          flex: 0 0 auto;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 0.8125rem;
+          cursor: pointer;
+        }
+        .invite-button:hover {
+          border-color: var(--accent);
+          background: var(--surface-raised);
         }
         .grid {
           display: grid;

@@ -70,7 +70,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Relay — start or join a meeting</title>
+        <title>MySPACE — start or join a meeting</title>
       </Head>
       <main className="lobby">
         <section className="preview">
@@ -97,7 +97,7 @@ export default function Home() {
         </section>
 
         <section className="panel">
-          <div className="wordmark">Relay</div>
+          <div className="wordmark">MySPACE</div>
           <p className="tagline">HD meetings, straight from your browser. No install.</p>
 
           <form onSubmit={enterRoom} className="join-form">
